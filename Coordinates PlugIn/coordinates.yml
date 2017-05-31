@@ -1,0 +1,21 @@
+#It's the coordinates file.
+commands:
+  add:
+    - add
+    - a
+    - save
+  remove:
+    - remove
+    - rm
+    - delete
+  search:
+    - s
+    - search
+    - find
+  update:
+    - update
+    - u
+    - change
+  distance:
+    - distance
+    - d

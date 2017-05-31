@@ -1,0 +1,13 @@
+main: com.vlw0052.coordinates.CoordinatePlugin
+version: 1.0
+name: Save Coordinates Plugin
+
+commands:
+  sc:
+    description: Save/Edit/Delete/Search coordinates using this command.
+    usage: "Usage:\n
+    		/sc add [name] [here | <x> <y> <z> ]\n
+           /sc update [name] [here | <x> <y> <z> ]\n
+           /sc remove [name]\n
+           /sc search [name]\n
+           /sc distance [name]"
