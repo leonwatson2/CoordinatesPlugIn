@@ -1,9 +1,5 @@
 package com.vlw0052.coordinates.commands;
 
-/*	
- * CommandComplete class Overrides the onTabComplete to 
- * add values from the store into the possible tab completions.
- */
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +11,14 @@ import org.bukkit.command.TabCompleter;
 import com.vlw0052.coordinates.CoordinatePlugin;
 import com.vlw0052.coordinates.util.Coordinate;
 
+/**
+ * CommandComplete class Overrides the onTabComplete to 
+ * add values from the store into the possible tab completions.
+ * 
+ * @author Leon Watson
+ * 
+ * @since Jun 1, 2017
+ */
 public class CommandComplete implements TabCompleter {
 	
 	CoordinatePlugin plugin;
@@ -68,9 +72,11 @@ public class CommandComplete implements TabCompleter {
 		return values;
 	}
 	
-	/*
+	/**
 	 * Gets the current names of all the coordinates in the store that start
 	 * with the prefix passed in.
+	 * @param prefix the starting value of the location typed.
+	 * @return a list of strings that with the {@code prefix}.
 	 */
 	private List<String> getStoredNames(String prefix){
 

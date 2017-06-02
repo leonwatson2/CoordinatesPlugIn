@@ -1,18 +1,11 @@
 package com.vlw0052.coordinates;
-/*	
- * Main file for Java plugin which overrides the onEnable and onDisable
- * functions.
- * 
- *  This plugin allows players to save coordinates for later use.
- *  As well as get the direction of the location from their current location.
- */
+
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.logging.Logger;
 
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -20,14 +13,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.vlw0052.coordinates.commands.CommandComplete;
 import com.vlw0052.coordinates.commands.CoordinatesCommand;
+import com.vlw0052.coordinates.util.CommandType;
 import com.vlw0052.coordinates.util.Coordinate;
 import com.vlw0052.coordinates.util.CoordinatesStore;
-
+import com.vlw0052.coordinates.util.CustomCommand;
+import com.vlw0052.coordinates.util.CustomCommands;
+/**	
+ * Main file for Java plugin which overrides the onEnable and onDisable
+ * functions.
+ * 
+ *  This plugin allows players to save coordinates for later use.
+ *  As well as get the direction of the location from their current location.
+ *  
+ *  @author Leon Watson
+ *  
+ *  @since Jun 1, 2017
+ */
 public class CoordinatePlugin extends JavaPlugin {
 	
 	protected CoordinatesStore savedCoordinates;
 	protected FileConfiguration coordinatesConfig;
 	static String CoordinatesFileName = "coordinates.yml"; 
+	public CustomCommands customCommands; 
 	
 	@Override
 	public void onEnable(){
@@ -38,15 +45,10 @@ public class CoordinatePlugin extends JavaPlugin {
 		registerCommands();
 		registerDataFile();
 		registerEvents();
+		initCustomCommands();
 		logger.info(pdfFile.getName() + " is working.");
 		// TODO: Testing the use of config files.
-		@SuppressWarnings("unchecked")
-		List<String> t = (List<String>) getCoordinatesFile().get("commands.add");
-		FileConfiguration c = getCoordinatesFile();
-		for(String command : t){
-			logger.info(command);
-				
-		}
+		
 		
 		saveCoordinatesFile();
 	}
@@ -58,7 +60,9 @@ public class CoordinatePlugin extends JavaPlugin {
 		
 		logger.info(pdfFile.getName() + " is disabled.");
 	}
-	
+	/**
+	 * Saves coordinate file.
+	 */
 	private void saveCoordinatesFile(){
 		try {
 			getCoordinatesFile().save(createFile(CoordinatesFileName));
@@ -67,6 +71,30 @@ public class CoordinatePlugin extends JavaPlugin {
 			e.printStackTrace();
 		}
 	}
+	
+	/**
+	 * Initializes Custom Commands using the coordinates config file.
+	 * Initializes the {@code customCommands} variable.
+	 */
+	@SuppressWarnings("unchecked")
+	private void initCustomCommands(){
+		this.customCommands = new CustomCommands();
+		
+		List<Object> t = (List<Object>) getCoordinatesFile().getList("commands");
+		for(Object l: t){	
+			Map<String, ?> m = (Map<String, ?>)l;
+			String type = (String) m.get("type");
+			List<String> aliases = (List<String>)m.get("aliases");
+			
+			CommandType commandType = CommandType.getCommandType(type);
+			CustomCommand cCommand = new CustomCommand(type, aliases);
+			
+			this.customCommands.insertCommand(commandType, cCommand);
+		}
+		
+	}
+	
+
 	
 	public void registerConfig(){
 		coordinatesConfig = new YamlConfiguration();
@@ -122,6 +150,7 @@ public class CoordinatePlugin extends JavaPlugin {
 	            saveResource(fileName, false);
 	        } else {
 	            getLogger().info(String.format("%s found, loading!", fileName));
+	            
 	        }
 	        
 	        return file;

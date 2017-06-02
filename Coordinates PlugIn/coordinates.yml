@@ -1,21 +1,34 @@
-#It's the coordinates file.
+#It's the default coordinates file.
 commands:
-  add:
-    - add
-    - a
-    - save
-  remove:
-    - remove
-    - rm
-    - delete
-  search:
-    - s
-    - search
-    - find
-  update:
-    - update
-    - u
-    - change
-  distance:
-    - distance
-    - d
+- add: null
+  type: add
+  aliases:
+  - a
+  - add
+- remove: null
+  type: remove
+  aliases:
+  - remove
+  - rm
+  - delete
+- search: null
+  type: search
+  aliases:
+  - srch
+  - search
+  - find
+- update: null
+  type: update
+  aliases:
+  - update
+  - u
+- distance: null
+  type: distance
+  aliases:
+  - distance
+  - dist
+- list: null
+  type: list
+  aliases:
+  - list
+  - ls

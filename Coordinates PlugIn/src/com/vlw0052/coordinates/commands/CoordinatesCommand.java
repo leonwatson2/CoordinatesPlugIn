@@ -13,15 +13,25 @@ import org.bukkit.entity.Player;
 
 import com.vlw0052.coordinates.CoordinatePlugin;
 import com.vlw0052.coordinates.util.Arguments;
+import com.vlw0052.coordinates.util.CommandType;
 import com.vlw0052.coordinates.util.Coordinate;
 
+/**
+ * {@code CoordinatesCommand} is a {@link CommandExecutor}
+ * for the {@link CoordinatePlugin} that overrides the onCommand method
+ * to do commands of the coordinate plugin.
+ * 
+ * @author Leon Watson
+ * 
+ * @since Jun 1, 2017
+ */
 public class CoordinatesCommand implements CommandExecutor {
 	
 	private CoordinatePlugin coordinatePlugin;
 	private static final double MAXSHOWN = 7;
 	
 	public CoordinatesCommand(CoordinatePlugin cP) {
-		// TODO Auto-generated constructor stub
+		
 		this.coordinatePlugin = cP;
 	}
 	
@@ -43,30 +53,24 @@ public class CoordinatesCommand implements CommandExecutor {
 				}
 			}
 
-			String command = args[0];
+
+			CommandType command = this.coordinatePlugin.customCommands.getCommandType(args[0]);
 			
-			switch(command.toLowerCase()){
-				case "list":
-				case "all":
+			switch(command){
+				case LIST:
 					return this.printSavedLocations(args, sender);
-				case "add":
-				case "a":
-				case "save":
+				case ADD:
 					return this.addLocation(args, sender);
 					
-				case "remove":
-				case "delete":
-				case "rm":
-				case "del":
+				case REMOVE:
 					return this.removeLocation(args, sender);
 					
-				case "update":
+				case UPDATE:
 					return this.updateLocation(args, sender);
 					
-				case "d":
-				case "distance":
+				case DISTANCE:
 					return this.distanceFromLocation(args, sender);
-				case "search":
+				case SEARCH:
 					return this.searchLocation(args, sender);
 				default:
 					
@@ -75,6 +79,7 @@ public class CoordinatesCommand implements CommandExecutor {
 		
 		
 	}
+	
 	private boolean searchLocation(String[] args, CommandSender player){
 		
 		String response = this.coordinatePlugin.getStore().search(Arrays.copyOfRange(args, 1, args.length));
